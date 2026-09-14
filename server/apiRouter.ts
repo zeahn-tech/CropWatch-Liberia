@@ -169,7 +169,7 @@ apiRouter.post('/auth/register', async (req: Request, res: Response) => {
     id: `usr_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
     email: normalizedEmail,
     fullName: fullName.trim(),
-    role: role || 'farmer',
+    role: 'farmer',
     county: county || 'Bong',
     organization,
     passwordHash,
@@ -243,6 +243,56 @@ apiRouter.post('/auth/login', async (req: Request, res: Response) => {
     token,
     user: db.getSafeUser(user),
     expertProfile,
+  });
+});
+
+
+apiRouter.post('/admin/users/invite', requireAuth, requireRoles('admin'), async (req, res) => {
+  const { fullName, email, password, role, county, organization, qualification, yearsExperience } = req.body;
+  if (!fullName || !email || !password || !role) {
+    return res.status(400).json({
+      success: false,
+      error: 'Full name, email, password, and role are required.',
+    });
+  }
+
+  const normalizedEmail = email.trim().toLowerCase();
+  const existing = db.getUserByEmail(normalizedEmail);
+  if (existing) {
+    return res.status(400).json({ success: false, error: 'An account with this email already exists.' });
+  }
+
+  const passwordHash = await hashPassword(password);
+  const newUser = {
+    id: `usr_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
+    email: normalizedEmail,
+    fullName: fullName.trim(),
+    role: role,
+    county: county || 'Bong',
+    organization,
+    passwordHash,
+    createdAt: new Date().toISOString(),
+  };
+
+  db.addUser(newUser);
+
+  if (newUser.role === 'expert' || newUser.role === 'senior_expert') {
+    db.addExpertProfile({
+      userId: newUser.id,
+      fullName: newUser.fullName,
+      organization: organization || 'Independent Consultant',
+      qualification: qualification || 'BSc Agronomy',
+      yearsExperience: Number(yearsExperience) || 2,
+      verificationStatus: 'pending', // admin must still verify this profile if they want to approve it separately, or we could set it to verified if admin creates it, but instructions say: "must still go through the existing verificationStatus: 'pending' -> admin verification flow". So we keep it pending.
+      specialties: ['General Agronomy', 'Crop Protection'],
+      casesReviewedCount: 0,
+      avgResponseHours: 0,
+    });
+  }
+
+  res.json({
+    success: true,
+    user: db.getSafeUser(newUser),
   });
 });
 
@@ -423,6 +473,18 @@ apiRouter.get('/farms', requireAuth, (req: Request, res: Response) => {
     const farms = db.getFarms(user.id);
     return res.json({ success: true, farms });
   }
+  if (user.role === 'expert' || user.role === 'senior_expert') {
+    const cases = db.getExpertCases();
+    const myCases = cases.filter(c => c.assignedExpertId === user.id);
+    const myObsIds = new Set(myCases.map(c => c.observationId));
+    const obs = db.getObservations().filter(o => myObsIds.has(o.id));
+    const myPlantingIds = new Set(obs.map(o => o.plantingId));
+    const plantings = db.getPlantings().filter(p => myPlantingIds.has(p.id));
+    const myFarmIds = new Set(plantings.map(p => p.farmId));
+    const farms = db.getFarms().filter(f => myFarmIds.has(f.id));
+    return res.json({ success: true, farms });
+  }
+
   const targetUserId = req.query.userId as string | undefined;
   const farms = targetUserId ? db.getFarms(targetUserId) : db.getFarms();
   res.json({ success: true, farms });
@@ -436,6 +498,18 @@ apiRouter.get('/farms/:id', requireAuth, (req: Request, res: Response) => {
   }
   if (user.role === 'farmer' && farm.userId !== user.id) {
     return res.status(403).json({ success: false, error: 'Access denied. You do not own this farm.' });
+  }
+  if (user.role === 'expert' || user.role === 'senior_expert') {
+    const cases = db.getExpertCases();
+    const myCases = cases.filter(c => c.assignedExpertId === user.id);
+    const myObsIds = new Set(myCases.map(c => c.observationId));
+    const obs = db.getObservations().filter(o => myObsIds.has(o.id));
+    const myPlantingIds = new Set(obs.map(o => o.plantingId));
+    const plantings = db.getPlantings().filter(p => myPlantingIds.has(p.id));
+    const myFarmIds = new Set(plantings.map(p => p.farmId));
+    if (!myFarmIds.has(farm.id)) {
+      return res.status(403).json({ success: false, error: 'Access denied. Farm is not related to your assigned cases.' });
+    }
   }
   res.json({ success: true, farm });
 });
@@ -527,7 +601,21 @@ apiRouter.post('/fields', requireAuth, (req: Request, res: Response) => {
 // --- PLANTINGS (Authorization Protected) ---
 apiRouter.get('/plantings', requireAuth, (req: Request, res: Response) => {
   const user = (req as any).user as User;
-  const plantings = user.role === 'farmer' ? db.getPlantings(user.id) : db.getPlantings(req.query.userId as string);
+  if (user.role === 'farmer') {
+    return res.json({ success: true, plantings: db.getPlantings(user.id) });
+  }
+
+  if (user.role === 'expert' || user.role === 'senior_expert') {
+    const cases = db.getExpertCases();
+    const myCases = cases.filter(c => c.assignedExpertId === user.id);
+    const myObsIds = new Set(myCases.map(c => c.observationId));
+    const obs = db.getObservations().filter(o => myObsIds.has(o.id));
+    const myPlantingIds = new Set(obs.map(o => o.plantingId));
+    const plantings = db.getPlantings().filter(p => myPlantingIds.has(p.id));
+    return res.json({ success: true, plantings });
+  }
+
+  const plantings = db.getPlantings(req.query.userId as string);
   res.json({ success: true, plantings });
 });
 
@@ -541,6 +629,16 @@ apiRouter.get('/plantings/:id', requireAuth, (req: Request, res: Response) => {
   const farm = db.getFarmById(planting.farmId);
   if (user.role === 'farmer' && farm?.userId !== user.id) {
     return res.status(403).json({ success: false, error: 'Access denied. You do not own this planting.' });
+  }
+  if (user.role === 'expert' || user.role === 'senior_expert') {
+    const cases = db.getExpertCases();
+    const myCases = cases.filter(c => c.assignedExpertId === user.id);
+    const myObsIds = new Set(myCases.map(c => c.observationId));
+    const obs = db.getObservations().filter(o => myObsIds.has(o.id));
+    const myPlantingIds = new Set(obs.map(o => o.plantingId));
+    if (!myPlantingIds.has(planting.id)) {
+      return res.status(403).json({ success: false, error: 'Access denied. Planting is not related to your assigned cases.' });
+    }
   }
 
   res.json({ success: true, planting });
@@ -610,6 +708,14 @@ apiRouter.get('/observations', requireAuth, (req: Request, res: Response) => {
 
   if (user.role === 'farmer') {
     const observations = db.getObservations().filter((o) => o.farmerId === user.id);
+    return res.json({ success: true, observations });
+  }
+  
+  if (user.role === 'expert' || user.role === 'senior_expert') {
+    const cases = db.getExpertCases();
+    const myCases = cases.filter(c => c.assignedExpertId === user.id);
+    const myObsIds = new Set(myCases.map(c => c.observationId));
+    const observations = db.getObservations().filter(o => myObsIds.has(o.id));
     return res.json({ success: true, observations });
   }
 
@@ -1459,10 +1565,19 @@ apiRouter.post('/knowledge/:id/submit-for-review', requireAuth, (req: Request, r
   res.json({ success: true, knowledgeItem: updated });
 });
 
+
 apiRouter.post('/knowledge/:id/validate', requireAuth, (req: Request, res: Response) => {
   const user = (req as any).user as User;
   if (user.role === 'farmer') {
     return res.status(403).json({ success: false, error: 'Farmers cannot validate knowledge base articles.' });
+  }
+
+  // Check if reviewer is a verified expert, senior expert, or admin
+  if (user.role === 'expert') {
+    const expertProfile = db.getExpertProfileByUserId(user.id);
+    if (!expertProfile || expertProfile.verificationStatus !== 'verified') {
+      return res.status(403).json({ success: false, error: 'Governance restriction: Unverified experts cannot validate knowledge articles.' });
+    }
   }
 
   const items = db.getKnowledge();
@@ -1479,7 +1594,13 @@ apiRouter.post('/knowledge/:id/validate', requireAuth, (req: Request, res: Respo
     });
   }
 
+  // Ensure item is actually in 'review' status
+  if (item.governanceStatus !== 'review') {
+    return res.status(400).json({ success: false, error: 'Governance restriction: Only articles in "review" status can be validated.' });
+  }
+
   const updated = db.updateKnowledge(item.id, {
+
     governanceStatus: 'validated',
     reviewedByExpertId: user.id,
     reviewedByExpertName: user.fullName,

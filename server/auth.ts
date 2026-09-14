@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
 import { User } from '../src/types.js';
 
-export const JWT_SECRET = process.env.JWT_SECRET || 'cropwatch-liberia-secure-jwt-secret-2026';
+export const JWT_SECRET = process.env.JWT_SECRET || (process.env.NODE_ENV === 'production' ? (() => { throw new Error('JWT_SECRET environment variable is required in production.'); })() : 'dev-secret-cropwatch-liberia-fallback');
 export const SESSION_COOKIE_NAME = 'cropwatch_session';
 
 export interface TokenPayload {

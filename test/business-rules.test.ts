@@ -328,6 +328,7 @@ describe('CropWatch Liberia — Core Business & Governance Rules Tests', () => {
       assert.strictEqual(resCreate.status, 200);
       const dataCreate = await resCreate.json();
       const articleId = dataCreate.knowledgeItem.id;
+      await fetch(`${baseUrl}/knowledge/${articleId}/submit-for-review`, { method: 'POST', headers: { Authorization: `Bearer ${marieToken}` } });
 
       // 1. Author Marie tries to validate her own article (she is "expert" so she passes role check, but fails author check)
       const resSelfValidate = await fetch(`${baseUrl}/knowledge/${articleId}/validate`, {
@@ -370,6 +371,7 @@ describe('CropWatch Liberia — Core Business & Governance Rules Tests', () => {
       assert.strictEqual(resCreateFlomo.status, 200);
       const dataCreateFlomo = await resCreateFlomo.json();
       const flomoArticleId = dataCreateFlomo.knowledgeItem.id;
+      await fetch(`${baseUrl}/knowledge/${flomoArticleId}/submit-for-review`, { method: 'POST', headers: { Authorization: `Bearer ${flomoToken}` } });
 
       // Author Flomo (senior_expert, so passes role check) tries to publish his own article
       const resSelfPublishFlomo = await fetch(`${baseUrl}/knowledge/${flomoArticleId}/publish`, {
@@ -395,5 +397,51 @@ describe('CropWatch Liberia — Core Business & Governance Rules Tests', () => {
       });
       assert.strictEqual(resPub.status, 200, 'Reviewer should successfully publish article');
     });
+
+    test('Unverified expert cannot validate article', async () => {
+      const unverifiedToken = await login('arthur.doe@extension.moa.gov.lr', 'Password123!');
+      const res = await fetch(`${baseUrl}/knowledge/know_cassava_1/validate`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${unverifiedToken}` },
+      });
+      assert.strictEqual(res.status, 403);
+      const data = await res.json();
+      assert.match(data.error, /Unverified/);
+    });
+
+    test('Draft cannot be validated directly', async () => {
+      const verifiedToken = await login('expert.marie@cari.gov.lr', 'Password123!');
+      
+      // We need a draft article. We can create one first.
+      const resCreate = await fetch(`${baseUrl}/knowledge`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${verifiedToken}` 
+        },
+        body: JSON.stringify({
+          topic: 'Draft Article',
+          symptomsDescription: 'This is a draft.',
+          preventativeMeasures: 'Draft.',
+          approvedOrganicTreatments: 'Draft.',
+          approvedChemicalGuidance: 'Draft.',
+        }),
+      });
+      const dataCreate = await resCreate.json();
+      const draftId = dataCreate.knowledgeItem.id;
+
+      // Another verified expert tries to validate it (to avoid author check)
+      const adminToken = await login('admin.barclay@cropwatch.gov.lr', 'Password123!');
+      const resValidate = await fetch(`${baseUrl}/knowledge/${draftId}/validate`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${adminToken}` },
+      });
+      
+      assert.strictEqual(resValidate.status, 400);
+      const dataValidate = await resValidate.json();
+      assert.match(dataValidate.error, /review/);
+    });
+
   });
 });
+
