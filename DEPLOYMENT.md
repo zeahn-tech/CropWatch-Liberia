@@ -23,3 +23,16 @@ Build and start the application:
 npm run build
 npm start
 ```
+
+## 4. Deploying to GitHub Pages
+
+If you are seeing a **blank white screen** or **404 errors** for `manifest.webmanifest` on GitHub Pages, it is because you deployed the raw source code instead of the compiled build. React + Vite apps cannot run directly from source.
+
+We have added a GitHub Actions workflow (`.github/workflows/deploy.yml`) that automatically builds and deploys your app.
+
+**To fix your GitHub Pages deployment:**
+1. Commit and push all latest changes (including the new `.github/workflows/deploy.yml` file) to your `main` branch.
+2. Go to your repository on GitHub.
+3. Navigate to **Settings** > **Pages**.
+4. Under **Build and deployment**, change the **Source** from "Deploy from a branch" to **"GitHub Actions"**.
+5. GitHub will now automatically build your `dist/` folder and deploy it correctly. The blank screen and 404 errors will be resolved.
