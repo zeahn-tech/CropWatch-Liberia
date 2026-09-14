@@ -147,7 +147,7 @@ export default function App() {
           setIsDemoMode(authRes.isDemoMode || false);
           if (authRes.allUsers) setAllDemoUsers(authRes.allUsers);
 
-          if (authRes.isAuthenticated && authRes.user) {
+          if (authRes.authenticated && authRes.user) {
             setCurrentUser(authRes.user);
             setExpertProfile(authRes.expertProfile);
           } else {
@@ -218,7 +218,7 @@ export default function App() {
         setIsDemoMode(authRes.isDemoMode || false);
         if (authRes.allUsers) setAllDemoUsers(authRes.allUsers);
 
-        if (authRes.success && authRes.isAuthenticated && authRes.user) {
+        if (authRes.success && authRes.authenticated && authRes.user) {
           setCurrentUser(authRes.user);
           setExpertProfile(authRes.expertProfile);
           await loadServerData(storedToken || undefined);
@@ -263,9 +263,23 @@ export default function App() {
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
+    const handleServiceWorkerMessage = (event: MessageEvent) => {
+      if (event.data && event.data.type === 'SYNC_COMPLETE') {
+        refreshPendingScans();
+        loadServerData();
+      }
+    };
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.addEventListener('message', handleServiceWorkerMessage);
+    }
+
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.removeEventListener('message', handleServiceWorkerMessage);
+      }
     };
   }, []);
 
@@ -388,6 +402,19 @@ export default function App() {
         farmerReportedSymptoms: payload.farmerReportedSymptoms,
         capturedAt: new Date().toISOString(),
       });
+      
+      // Register background sync if supported so it triggers automatically when online
+      if ('serviceWorker' in navigator) {
+        try {
+          const readyReg = await navigator.serviceWorker.ready;
+          if ('sync' in readyReg) {
+            await (readyReg as any).sync.register('sync-observations');
+          }
+        } catch (err) {
+          console.warn('Background sync registration failed on save:', err);
+        }
+      }
+      
       await refreshPendingScans();
       alert('Saved observation to local offline queue. Will sync when connection is restored.');
     } else {

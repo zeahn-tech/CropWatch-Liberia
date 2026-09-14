@@ -25,7 +25,7 @@ export const NewPlantingModal: React.FC<NewPlantingModalProps> = ({
 }) => {
   const [selectedFarmId, setSelectedFarmId] = useState(farms[0]?.id || '');
   const [selectedCropId, setSelectedCropId] = useState(crops[0]?.id || '');
-  const [varietyName, setVarietyName] = useState(crops[0]?.commonVarietiesInLiberia[0] || '');
+  const [varietyName, setVarietyName] = useState(crops[0]?.commonVarietiesInLiberia?.[0] || '');
   const [plantingDate, setPlantingDate] = useState(new Date().toISOString().split('T')[0]);
   const [acreage, setAcreage] = useState(1.5);
   const [growthStage, setGrowthStage] = useState('Vegetative');
@@ -36,7 +36,7 @@ export const NewPlantingModal: React.FC<NewPlantingModalProps> = ({
   const handleCropChange = (id: string) => {
     setSelectedCropId(id);
     const crop = crops.find((c) => c.id === id);
-    if (crop && crop.commonVarietiesInLiberia.length > 0) {
+    if (crop && crop.commonVarietiesInLiberia?.length > 0) {
       setVarietyName(crop.commonVarietiesInLiberia[0]);
     }
   };
@@ -108,7 +108,7 @@ export const NewPlantingModal: React.FC<NewPlantingModalProps> = ({
               className="w-full px-3 py-2 rounded-lg bg-stone-950 border border-stone-800 text-white"
               required
             />
-            {selectedCrop && (
+            {selectedCrop && selectedCrop.commonVarietiesInLiberia && (
               <p className="text-[10px] text-stone-400 mt-1">
                 Common in Liberia: {selectedCrop.commonVarietiesInLiberia.join(', ')}
               </p>

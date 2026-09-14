@@ -338,6 +338,9 @@ export function initializeSqliteSchema() {
   ensureColumnExists('routing_thresholds', 'knowledge_periodic_review_days', 'INTEGER NOT NULL DEFAULT 365');
   ensureColumnExists('expert_assessments', 'resolves_escalation', 'INTEGER NOT NULL DEFAULT 0');
   ensureColumnExists('expert_assessments', 'escalation_resolution_notes', 'TEXT');
+  ensureColumnExists('agricultural_knowledge', 'author_id', 'TEXT');
+  ensureColumnExists('agricultural_knowledge', 'reviewed_by_expert_id', 'TEXT');
+  ensureColumnExists('agricultural_knowledge', 'review_due_date', 'TEXT');
 
   console.log('✅ Database schema and indexes verified.');
 }

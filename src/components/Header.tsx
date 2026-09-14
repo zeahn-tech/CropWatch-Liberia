@@ -13,7 +13,6 @@ import {
   User as UserIcon,
   ShieldCheck,
   Terminal,
-  Database,
 } from 'lucide-react';
 import { User, ExpertProfile } from '../types.js';
 import { OfflinePendingScan } from '../lib/offlineDb.js';
@@ -218,11 +217,11 @@ export const Header: React.FC<HeaderProps> = ({
                         {getRoleBadge(currentUser.role)}
                         {currentUser.supabaseId ? (
                           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-800 font-mono" title={`Auth UID: ${currentUser.supabaseId}`}>
-                            <Database className="w-2.5 h-2.5" /> Cloud Auth
+                            <Sprout className="w-2.5 h-2.5" /> Cloud Auth
                           </span>
                         ) : (
                           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] bg-stone-800 text-stone-400 border border-stone-700 font-mono">
-                            <Database className="w-2.5 h-2.5" /> Connected
+                            <Sprout className="w-2.5 h-2.5" /> Connected
                           </span>
                         )}
                       </div>
