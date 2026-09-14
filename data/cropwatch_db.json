@@ -1,0 +1,874 @@
+{
+  "users": [
+    {
+      "id": "usr_farmer_1",
+      "email": "emmanuelzeahn45@gmail.com",
+      "fullName": "Emmanuel Zeahn",
+      "phoneNumber": "+231 77 012 3456",
+      "role": "farmer",
+      "county": "Bong",
+      "organization": "Bong Farmers Cooperative",
+      "createdAt": "2026-06-01T08:00:00Z",
+      "passwordHash": "$2b$10$A2.cGQX2LPalvrcKuu0ge.eSSMVYfiG6I0flAPq6WfeSk5uuGJTWu"
+    },
+    {
+      "id": "usr_expert_1",
+      "email": "expert.marie@cari.gov.lr",
+      "fullName": "Dr. Marie Kromah",
+      "phoneNumber": "+231 88 654 3210",
+      "role": "expert",
+      "county": "Bong",
+      "organization": "Central Agricultural Research Institute (CARI)",
+      "createdAt": "2026-05-15T09:30:00Z",
+      "passwordHash": "$2b$10$gvSMpMUW8nK8b0qN1p7EYu2QBjApO7lwDgDLLYCDaxEYH7cKPrB2S"
+    },
+    {
+      "id": "usr_senior_1",
+      "email": "senior.flomo@cuttington.edu.lr",
+      "fullName": "Prof. Josephus Flomo",
+      "phoneNumber": "+231 77 888 9999",
+      "role": "senior_expert",
+      "county": "Nimba",
+      "organization": "Cuttington University / National Agronomy Board",
+      "createdAt": "2026-04-10T10:00:00Z",
+      "passwordHash": "$2b$10$y3dMzO1lKHtrJyBmhEq8FegmZ2VgBVvizfyoCnbv5r8gJ10Wx00pO"
+    },
+    {
+      "id": "usr_candidate_1",
+      "email": "arthur.doe@extension.moa.gov.lr",
+      "fullName": "Arthur Doe",
+      "phoneNumber": "+231 77 444 3322",
+      "role": "expert",
+      "county": "Margibi",
+      "organization": "Ministry of Agriculture Field Extension",
+      "createdAt": "2026-09-02T11:00:00Z",
+      "passwordHash": "$2b$10$sH8M.dMH1jxwWO8Gg6rUAuzeyuurNEd4/yH8//qg3xl1/675.i6sq"
+    },
+    {
+      "id": "usr_admin_1",
+      "email": "admin.barclay@cropwatch.gov.lr",
+      "fullName": "Helena Barclay",
+      "phoneNumber": "+231 88 111 2233",
+      "role": "admin",
+      "county": "Montserrado",
+      "organization": "National Agricultural Technology Directorate",
+      "createdAt": "2026-01-01T00:00:00Z",
+      "passwordHash": "$2b$10$3UuHzC.pFCx72gVALeUNZeZmsTf20xPLydGypawxQj9B699by4L1O"
+    },
+    {
+      "id": "usr_farmer_2",
+      "email": "moses.kollie@nimba.farmers.lr",
+      "fullName": "Moses Kollie",
+      "phoneNumber": "+231 77 999 1122",
+      "role": "farmer",
+      "county": "Nimba",
+      "organization": "Sanniquellie Smallholder Union",
+      "passwordHash": "$2b$10$yTSj/TFDK5tTRYNxz4euNOcigE7z/H2OXafcS88eHeRV6gI56Zvta",
+      "createdAt": "2026-06-10T09:00:00Z"
+    }
+  ],
+  "expertProfiles": [
+    {
+      "userId": "usr_expert_1",
+      "fullName": "Dr. Marie Kromah",
+      "organization": "Central Agricultural Research Institute (CARI)",
+      "qualification": "PhD in Plant Pathology & Crop Protection",
+      "yearsExperience": 14,
+      "verificationStatus": "verified",
+      "specialties": [
+        "Cassava Viral & Fungal Pathology",
+        "Lowland Rice Diseases",
+        "Integrated Pest Management"
+      ],
+      "verifiedAt": "2026-05-20T10:00:00Z",
+      "verifiedByAdminName": "Helena Barclay",
+      "casesReviewedCount": 40,
+      "avgResponseHours": 4.8
+    },
+    {
+      "userId": "usr_senior_1",
+      "fullName": "Prof. Josephus Flomo",
+      "organization": "Cuttington University / National Agronomy Board",
+      "qualification": "DSc in Agronomy & Tropical Soil Fertility",
+      "yearsExperience": 22,
+      "verificationStatus": "verified",
+      "specialties": [
+        "Agronomic Adjudication",
+        "Soil Acidification & Iron Toxicity",
+        "National Pest Escalation"
+      ],
+      "verifiedAt": "2026-04-15T09:00:00Z",
+      "verifiedByAdminName": "Helena Barclay",
+      "casesReviewedCount": 64,
+      "avgResponseHours": 3.2
+    },
+    {
+      "userId": "usr_candidate_1",
+      "fullName": "Arthur Doe",
+      "organization": "Ministry of Agriculture Field Extension",
+      "qualification": "BSc General Agriculture (Univ. of Liberia)",
+      "yearsExperience": 3,
+      "verificationStatus": "pending",
+      "specialties": [
+        "Smallholder Vegetable Production",
+        "Weed Management"
+      ],
+      "casesReviewedCount": 0,
+      "avgResponseHours": 0
+    }
+  ],
+  "farms": [
+    {
+      "id": "farm_suakoko",
+      "userId": "usr_farmer_1",
+      "name": "Suakoko Valley Agro Farm",
+      "county": "Bong",
+      "district": "Suakoko District",
+      "sizeHectares": 3.8,
+      "soilType": "Loamy red laterite, acidic pH 5.2",
+      "irrigationSource": "Perennial valley stream & rainwater harvesting",
+      "createdAt": "2026-06-05T10:00:00Z"
+    },
+    {
+      "id": "farm_nimba",
+      "userId": "usr_farmer_2",
+      "name": "Mount Nimba Terrace Farm",
+      "county": "Nimba",
+      "district": "Sanniquellie-Mah District",
+      "sizeHectares": 2.5,
+      "soilType": "Clay-loam fertile topsoil",
+      "irrigationSource": "Mountain runoff stream",
+      "createdAt": "2026-06-12T10:00:00Z"
+    }
+  ],
+  "fields": [
+    {
+      "id": "fld_cassava_ridge",
+      "farmId": "farm_suakoko",
+      "name": "Plot 1 - North Upland Ridge",
+      "areaHectares": 2.2,
+      "topography": "Gentle slope (5%), well drained",
+      "createdAt": "2026-06-05T10:30:00Z"
+    },
+    {
+      "id": "fld_swamp_lowland",
+      "farmId": "farm_suakoko",
+      "name": "Plot 2 - Inland Valley Swamp",
+      "areaHectares": 1.6,
+      "topography": "Flooded lowland basin",
+      "createdAt": "2026-06-05T11:00:00Z"
+    },
+    {
+      "id": "fld_nimba_1",
+      "farmId": "farm_nimba",
+      "name": "Nimba Terrace Plot A",
+      "areaHectares": 1.5,
+      "topography": "Terraced mountain hillside",
+      "createdAt": "2026-06-12T10:30:00Z"
+    }
+  ],
+  "crops": [
+    {
+      "id": "crop_cassava",
+      "name": "Cassava",
+      "scientificName": "Manihot esculenta",
+      "growthDurationDaysMin": 240,
+      "growthDurationDaysMax": 365,
+      "icon": "Carrot",
+      "category": "staple_root"
+    },
+    {
+      "id": "crop_rice_lowland",
+      "name": "Lowland Rice (Swamp)",
+      "scientificName": "Oryza sativa",
+      "growthDurationDaysMin": 110,
+      "growthDurationDaysMax": 140,
+      "icon": "Wheat",
+      "category": "staple_cereal"
+    },
+    {
+      "id": "crop_rice_upland",
+      "name": "Upland Rice",
+      "scientificName": "Oryza sativa",
+      "growthDurationDaysMin": 95,
+      "growthDurationDaysMax": 120,
+      "icon": "Wheat",
+      "category": "staple_cereal"
+    },
+    {
+      "id": "crop_okra",
+      "name": "Okra",
+      "scientificName": "Abelmoschus esculentus",
+      "growthDurationDaysMin": 55,
+      "growthDurationDaysMax": 75,
+      "icon": "Sprout",
+      "category": "vegetable"
+    },
+    {
+      "id": "crop_pepper",
+      "name": "Hot Pepper (Scotch Bonnet)",
+      "scientificName": "Capsicum chinense",
+      "growthDurationDaysMin": 90,
+      "growthDurationDaysMax": 130,
+      "icon": "Flame",
+      "category": "vegetable"
+    },
+    {
+      "id": "crop_oilpalm",
+      "name": "Oil Palm",
+      "scientificName": "Elaeis guineensis",
+      "growthDurationDaysMin": 1095,
+      "growthDurationDaysMax": 1460,
+      "icon": "Palmtree",
+      "category": "perennial_cash"
+    }
+  ],
+  "varieties": [
+    {
+      "id": "var_cass_1",
+      "cropId": "crop_cassava",
+      "varietyName": "CARICASS-2",
+      "durationDays": 270,
+      "yieldPotential": "25-30 tons/ha",
+      "characteristics": "High resistance to Cassava Mosaic Disease; high starch content; adapted to Liberian acidic soils."
+    },
+    {
+      "id": "var_cass_2",
+      "cropId": "crop_cassava",
+      "varietyName": "Bassa Girl (Traditional)",
+      "durationDays": 330,
+      "yieldPotential": "18-22 tons/ha",
+      "characteristics": "Highly favored for fufu; sweet culinary taste; moderate susceptibility to brown streak disease."
+    },
+    {
+      "id": "var_rice_1",
+      "cropId": "crop_rice_lowland",
+      "varietyName": "Suakoko 8",
+      "durationDays": 130,
+      "yieldPotential": "4.5 tons/ha",
+      "characteristics": "Iron-toxicity tolerant swamp rice developed at CARI Suakoko; excellent milling recovery."
+    },
+    {
+      "id": "var_rice_2",
+      "cropId": "crop_rice_lowland",
+      "varietyName": "NERICA-L-19",
+      "durationDays": 115,
+      "yieldPotential": "5.0 tons/ha",
+      "characteristics": "High tillering, resistant to rice blast; thrives in inland valley swamps."
+    },
+    {
+      "id": "var_okra_1",
+      "cropId": "crop_okra",
+      "varietyName": "Liberian Local Dwarf",
+      "durationDays": 60,
+      "yieldPotential": "8-12 tons/ha",
+      "characteristics": "Dark green pods, tender flesh, tolerance to heavy rainy season precipitation."
+    }
+  ],
+  "plantings": [
+    {
+      "id": "plt_cass_2026",
+      "fieldId": "fld_cassava_ridge",
+      "farmId": "farm_suakoko",
+      "cropId": "crop_cassava",
+      "cropName": "Cassava",
+      "varietyId": "var_cass_1",
+      "varietyName": "CARICASS-2",
+      "plantingDate": "2026-06-15",
+      "expectedHarvestStart": "2027-03-15",
+      "expectedHarvestEnd": "2027-05-30",
+      "status": "active",
+      "currentGrowthStage": "Vegetative Canopy Expansion (91 days)",
+      "latestHealthScore": 68,
+      "latestStatus": "needs_attention",
+      "observationCount": 3,
+      "createdAt": "2026-06-15T08:00:00Z"
+    },
+    {
+      "id": "plt_rice_2026",
+      "fieldId": "fld_swamp_lowland",
+      "farmId": "farm_suakoko",
+      "cropId": "crop_rice_lowland",
+      "cropName": "Lowland Rice (Swamp)",
+      "varietyId": "var_rice_1",
+      "varietyName": "Suakoko 8",
+      "plantingDate": "2026-07-20",
+      "expectedHarvestStart": "2026-11-15",
+      "expectedHarvestEnd": "2026-12-05",
+      "status": "active",
+      "currentGrowthStage": "Tillering / Stem Elongation (56 days)",
+      "latestHealthScore": 88,
+      "latestStatus": "good",
+      "observationCount": 2,
+      "createdAt": "2026-07-20T08:00:00Z"
+    },
+    {
+      "id": "plt_nimba_rice",
+      "fieldId": "fld_nimba_1",
+      "farmId": "farm_nimba",
+      "cropId": "crop_rice_upland",
+      "cropName": "Upland Rice",
+      "varietyName": "NERICA-4",
+      "plantingDate": "2026-06-25",
+      "expectedHarvestStart": "2026-10-15",
+      "expectedHarvestEnd": "2026-11-05",
+      "status": "active",
+      "currentGrowthStage": "Grain Filling",
+      "latestHealthScore": 78,
+      "latestStatus": "good",
+      "observationCount": 1,
+      "createdAt": "2026-06-25T08:00:00Z"
+    }
+  ],
+  "observations": [
+    {
+      "id": "obs_cass_1",
+      "plantingId": "plt_cass_2026",
+      "farmerId": "usr_farmer_1",
+      "observedAt": "2026-07-25T09:00:00Z",
+      "notes": "First shoot emergence is uniform across all ridges.",
+      "farmerReportedSymptoms": "None. Healthy green foliage.",
+      "images": [
+        {
+          "id": "img_c1",
+          "observationId": "obs_cass_1",
+          "imageUrl": "https://images.unsplash.com/photo-1592417817098-8f3d6eb22d57?auto=format&fit=crop&w=800&q=80",
+          "capturedAt": "2026-07-25T09:00:00Z",
+          "qualityScore": 0.94,
+          "isPrimary": true
+        }
+      ],
+      "healthScore": 94,
+      "healthStatus": "excellent",
+      "weatherSnapshot": {
+        "tempC": 27,
+        "humidity": 82,
+        "rain24hMm": 12.4,
+        "description": "Morning cloudiness with light afternoon monsoon shower."
+      }
+    },
+    {
+      "id": "obs_cass_2",
+      "plantingId": "plt_cass_2026",
+      "farmerId": "usr_farmer_1",
+      "observedAt": "2026-08-20T10:15:00Z",
+      "notes": "Good vigorous growth, slight insect feeding marks on outermost leaves.",
+      "farmerReportedSymptoms": "Small holes on lower leaves.",
+      "images": [
+        {
+          "id": "img_c2",
+          "observationId": "obs_cass_2",
+          "imageUrl": "https://images.unsplash.com/photo-1598512752271-33f913a5af13?auto=format&fit=crop&w=800&q=80",
+          "capturedAt": "2026-08-20T10:15:00Z",
+          "qualityScore": 0.91,
+          "isPrimary": true
+        }
+      ],
+      "healthScore": 86,
+      "healthStatus": "good",
+      "weatherSnapshot": {
+        "tempC": 28,
+        "humidity": 86,
+        "rain24hMm": 24,
+        "description": "Heavy continuous monsoonal rain over central Bong."
+      }
+    },
+    {
+      "id": "obs_cass_3",
+      "plantingId": "plt_cass_2026",
+      "farmerId": "usr_farmer_1",
+      "observedAt": "2026-09-12T14:30:00Z",
+      "notes": "Noticed yellow mosaic pattern and puckering on upper leaf canopy.",
+      "farmerReportedSymptoms": "Yellowing leaves, deformed leaf blades, whiteflies spotted under leaves.",
+      "images": [
+        {
+          "id": "img_c3",
+          "observationId": "obs_cass_3",
+          "imageUrl": "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?auto=format&fit=crop&w=800&q=80",
+          "capturedAt": "2026-09-12T14:30:00Z",
+          "qualityScore": 0.88,
+          "isPrimary": true
+        }
+      ],
+      "healthScore": 68,
+      "healthStatus": "needs_attention",
+      "weatherSnapshot": {
+        "tempC": 29,
+        "humidity": 89,
+        "rain24hMm": 18.5,
+        "description": "Humid tropical afternoon with scattered thunderstorms."
+      },
+      "aiAnalysis": {
+        "id": "ai_cass_3",
+        "observationId": "obs_cass_3",
+        "modelVersion": "gemini-2.5-flash / liberia-agri-v1.4",
+        "analyzedAt": "2026-09-12T14:31:20Z",
+        "detectedCrop": {
+          "name": "Cassava",
+          "confidence": 0.97,
+          "matchesPlanting": true
+        },
+        "health": {
+          "score": 68,
+          "status": "needs_attention",
+          "confidence": 0.82
+        },
+        "growthStage": {
+          "stage": "Vegetative Canopy Development",
+          "confidence": 0.89,
+          "estimatedDaysFromPlanting": 89
+        },
+        "visualObservations": [
+          {
+            "feature": "Upper young leaves",
+            "visualFinding": "Irregular yellow and green mosaic mottling with leaf lamina distortion",
+            "severity": "moderate"
+          },
+          {
+            "feature": "Leaf undersides",
+            "visualFinding": "Presence of small white powdery insects consistent with Bemisia tabaci",
+            "severity": "mild"
+          }
+        ],
+        "hypotheses": [
+          {
+            "conditionName": "Cassava Mosaic Disease (CMD)",
+            "type": "disease",
+            "probability": 0.76,
+            "evidenceJustification": "Classic chlorotic mosaic pattern, leaf curling, and whitefly vector presence in humid Bong agro-zone."
+          },
+          {
+            "conditionName": "Zinc or Nitrogen Micronutrient Deficiency",
+            "type": "nutrient_deficiency",
+            "probability": 0.24,
+            "evidenceJustification": "Interveinal leaf yellowing can mimic early viral symptoms on acidic laterite soils."
+          }
+        ],
+        "stresses": {
+          "waterStress": "none",
+          "waterConfidence": 0.9,
+          "nutrientStress": "low",
+          "nutrientConfidence": 0.72
+        },
+        "harvestEstimate": {
+          "minimumDays": 160,
+          "maximumDays": 240,
+          "confidence": 0.75
+        },
+        "recommendedActions": {
+          "cultural": [
+            "Carefully inspect neighboring plants within 5 meters for similar mosaic patterns.",
+            "If symptoms worsen, rogue (uproot) severely stunted infected plants and destroy them away from the field.",
+            "Always use disease-free certified stems (such as CARICASS-2) for new vegetative propagation."
+          ],
+          "organic": [
+            "Apply diluted neem leaf aqueous extract or wood ash tea to the underside of leaves to discourage whitefly vectors."
+          ],
+          "chemicalAdvisory": "Synthetic chemical insecticides for whitefly control are not recommended for smallholder root crops due to cost and safety risks. Consult an agricultural extension agent before any chemical intervention."
+        },
+        "routing": {
+          "requiresExpertReview": true,
+          "reasons": [
+            "AI diagnostic confidence is in medium tier (76%)",
+            "Suspected viral disease impacting staple food security",
+            "Health score declined by 18 points since previous observation"
+          ],
+          "priority": "high"
+        },
+        "limitations": [
+          "Assessment is based solely on 2D foliar photographs without laboratory molecular confirmation (PCR).",
+          "Root tuber development cannot be evaluated from leaf images alone."
+        ],
+        "rawObservationsText": "Clear yellow-green mosaic mottling visible across top 3 tiers of leaves with moderate curling along leaf margins.",
+        "rawInterpretationText": "Symptom geometry aligns with begomovirus transmission via whiteflies (Cassava Mosaic Disease).",
+        "rawPredictionText": "If whitefly infestation continues unchecked during this rainy period, yield may decline by 20-35% on susceptible stands."
+      },
+      "latestExpertAssessment": {
+        "id": "asmt_1789399217771",
+        "caseId": "case_cmd_001",
+        "observationId": "obs_cass_3",
+        "expertId": "usr_expert_1",
+        "expertName": "Dr. Marie Kromah",
+        "expertOrganization": "Central Agricultural Research Institute (CARI)",
+        "expertRole": "Agricultural Specialist",
+        "version": 3,
+        "isCurrent": true,
+        "cropConfirmed": true,
+        "verifiedCondition": "Cassava Mosaic Disease (CMD)",
+        "decision": "confirmed",
+        "severity": "severe",
+        "expertConfidence": "high",
+        "actionRecommendations": [
+          "Rogue infected plants and burn or bury away from cassava field.",
+          "Replant next cycle only with CARI-certified CMD-resistant cuttings."
+        ],
+        "farmerExplanation": "Confirmed typical yellow mosaic leaf curling on cassava.",
+        "reviewedAt": "2026-09-14T15:20:17.771Z"
+      }
+    },
+    {
+      "id": "obs_nimba_1",
+      "plantingId": "plt_nimba_rice",
+      "farmerId": "usr_farmer_2",
+      "observedAt": "2026-09-10T11:00:00Z",
+      "notes": "Grain filling stage on mountain terrace. Observed minor leaf tip browning on upper canopy.",
+      "farmerReportedSymptoms": "Leaf tips slightly brown.",
+      "images": [
+        {
+          "id": "img_nimba_1",
+          "observationId": "obs_nimba_1",
+          "imageUrl": "https://images.unsplash.com/photo-1592417817098-8f3d6eb22d57?auto=format&fit=crop&w=800&q=80",
+          "capturedAt": "2026-09-10T11:00:00Z",
+          "qualityScore": 0.9,
+          "isPrimary": true
+        }
+      ],
+      "healthScore": 78,
+      "healthStatus": "good"
+    }
+  ],
+  "expertCases": [
+    {
+      "id": "case_cmd_001",
+      "observationId": "obs_cass_3",
+      "plantingId": "plt_cass_2026",
+      "farmId": "farm_suakoko",
+      "farmerId": "usr_farmer_1",
+      "farmerName": "Emmanuel Zeahn",
+      "farmerCounty": "Bong",
+      "cropName": "Cassava",
+      "varietyName": "CARICASS-2",
+      "cropAgeDays": 89,
+      "status": "expert_reviewed",
+      "priority": "high",
+      "triggerType": "high_risk_disease",
+      "triggerReason": "Suspected Cassava Mosaic Disease with rapid 18-point health drop.",
+      "assignedExpertId": "usr_expert_1",
+      "assignedExpertName": "Dr. Marie Kromah",
+      "assignedAt": "2026-09-13T08:00:00Z",
+      "escalationLevel": 1,
+      "createdAt": "2026-09-12T14:32:00Z",
+      "updatedAt": "2026-09-14T15:20:17.771Z"
+    },
+    {
+      "id": "case_nimba_1",
+      "observationId": "obs_nimba_1",
+      "plantingId": "plt_nimba_rice",
+      "farmId": "farm_nimba",
+      "farmerId": "usr_farmer_2",
+      "farmerName": "Moses Kollie",
+      "farmerCounty": "Nimba",
+      "cropName": "Upland Rice",
+      "varietyName": "NERICA-4",
+      "cropAgeDays": 77,
+      "status": "queued",
+      "priority": "medium",
+      "triggerType": "farmer_request",
+      "triggerReason": "Farmer requested review on grain filling leaf tips.",
+      "escalationLevel": 1,
+      "createdAt": "2026-09-10T11:15:00Z",
+      "updatedAt": "2026-09-10T11:15:00Z"
+    },
+    {
+      "id": "case_unassigned_1",
+      "observationId": "obs_cass_2",
+      "plantingId": "plt_cass_2026",
+      "farmId": "farm_suakoko",
+      "farmerId": "usr_farmer_1",
+      "farmerName": "Emmanuel Zeahn",
+      "farmerCounty": "Bong",
+      "cropName": "Cassava",
+      "varietyName": "CARICASS-2",
+      "cropAgeDays": 75,
+      "status": "queued",
+      "priority": "medium",
+      "triggerType": "high_risk_disease",
+      "triggerReason": "Early spotting on foliage under high humidity.",
+      "escalationLevel": 1,
+      "createdAt": "2026-09-11T10:00:00Z",
+      "updatedAt": "2026-09-11T10:00:00Z"
+    }
+  ],
+  "expertAssessments": [
+    {
+      "id": "asmt_1789399217771",
+      "caseId": "case_cmd_001",
+      "observationId": "obs_cass_3",
+      "expertId": "usr_expert_1",
+      "expertName": "Dr. Marie Kromah",
+      "expertOrganization": "Central Agricultural Research Institute (CARI)",
+      "expertRole": "Agricultural Specialist",
+      "version": 3,
+      "isCurrent": true,
+      "cropConfirmed": true,
+      "verifiedCondition": "Cassava Mosaic Disease (CMD)",
+      "decision": "confirmed",
+      "severity": "severe",
+      "expertConfidence": "high",
+      "actionRecommendations": [
+        "Rogue infected plants and burn or bury away from cassava field.",
+        "Replant next cycle only with CARI-certified CMD-resistant cuttings."
+      ],
+      "farmerExplanation": "Confirmed typical yellow mosaic leaf curling on cassava.",
+      "reviewedAt": "2026-09-14T15:20:17.771Z"
+    },
+    {
+      "id": "asmt_1789399174972",
+      "caseId": "case_cmd_001",
+      "observationId": "obs_cass_3",
+      "expertId": "usr_expert_1",
+      "expertName": "Dr. Marie Kromah",
+      "expertOrganization": "Central Agricultural Research Institute (CARI)",
+      "expertRole": "Agricultural Specialist",
+      "version": 2,
+      "isCurrent": false,
+      "cropConfirmed": true,
+      "verifiedCondition": "Cassava Mosaic Disease (CMD)",
+      "decision": "confirmed",
+      "severity": "severe",
+      "expertConfidence": "high",
+      "actionRecommendations": [
+        "Rogue infected plants and burn or bury away from cassava field.",
+        "Replant next cycle only with CARI-certified CMD-resistant cuttings."
+      ],
+      "farmerExplanation": "Confirmed typical yellow mosaic leaf curling on cassava.",
+      "reviewedAt": "2026-09-14T15:19:34.972Z"
+    },
+    {
+      "id": "asmt_cmd_v1",
+      "caseId": "case_cmd_001",
+      "observationId": "obs_cass_3",
+      "expertId": "usr_expert_1",
+      "expertName": "Dr. Marie Kromah",
+      "expertOrganization": "Central Agricultural Research Institute (CARI)",
+      "expertRole": "Plant Pathologist",
+      "version": 1,
+      "isCurrent": false,
+      "cropConfirmed": true,
+      "verifiedCondition": "Cassava Mosaic Disease (CMD) - Early Inoculation Stage",
+      "decision": "confirmed",
+      "severity": "moderate",
+      "expertConfidence": "high",
+      "actionRecommendations": "Immediately rogue and bury or burn the 3 symptomatic plants to protect the rest of the CARICASS-2 stand. CARICASS-2 has moderate tolerance, but early rogueing prevents viral buildup while the canopy is closing. Do not spray synthetic insecticides; neem extract on surrounding stands is sufficient.",
+      "farmerExplanation": "I have reviewed your photos and confirmed early Cassava Mosaic Disease. CARICASS-2 is a resilient variety, but during the wet September rains, whiteflies transfer the virus between young plants. Removing the specific infected plants today will protect the rest of your harvest.",
+      "internalNotes": "Symptoms are classic for East African Cassava Mosaic Virus (EACMV-UG). CARI extension should monitor Suakoko district for vector buildup.",
+      "reviewedAt": "2026-09-13T10:45:00Z"
+    }
+  ],
+  "knowledge": [
+    {
+      "id": "kno_cmd",
+      "cropId": "crop_cassava",
+      "cropName": "Cassava",
+      "topic": "Cassava Mosaic Disease (CMD)",
+      "category": "disease",
+      "symptomsDescription": "Severe chlorotic mosaic pattern on leaves, leaf distortion and twisting, stunted shoot growth.",
+      "preventativeMeasures": "Plant certified resistant varieties (CARICASS-1, CARICASS-2). Use virus-free stem cuttings from mature healthy plants.",
+      "approvedOrganicTreatments": "Rogueing infected stands within first 3 months; neem extract to suppress whitefly populations.",
+      "approvedChemicalGuidance": "Chemical controls are uneconomical and unsafe for smallholder cassava farms. Cultural management is strictly required.",
+      "governanceStatus": "published",
+      "evidenceLevel": "peer_reviewed",
+      "sourceName": "CARI Technical Bulletin #14 on Root & Tuber Crops",
+      "authorName": "Dr. Marie Kromah",
+      "reviewedByExpertName": "Prof. Josephus Flomo",
+      "publishedAt": "2026-03-10T00:00:00Z",
+      "updatedAt": "2026-03-10T00:00:00Z"
+    },
+    {
+      "id": "kno_rice_blast",
+      "cropId": "crop_rice_lowland",
+      "cropName": "Lowland Rice (Swamp)",
+      "topic": "Rice Blast (Pyricularia oryzae)",
+      "category": "disease",
+      "symptomsDescription": "Spindle-shaped diamond lesions on leaf blades with gray centers and dark reddish-brown borders. Severe neck rot during heading.",
+      "preventativeMeasures": "Maintain continuous water depth in lowland paddy (avoid dry spells); avoid excessive nitrogen fertilizer in damp weather.",
+      "approvedOrganicTreatments": "Burning crop residues post-harvest, applying rice husk ash rich in silica to strengthen plant cell walls.",
+      "approvedChemicalGuidance": "Fungicide applications (such as tricyclazole) must only be conducted under direct supervision of MOA extension officers using full personal protective equipment.",
+      "governanceStatus": "published",
+      "evidenceLevel": "university_extension",
+      "sourceName": "West Africa Rice Development Association (WARDA) / AfricaRice Field Guide",
+      "authorName": "Prof. Josephus Flomo",
+      "reviewedByExpertName": "Dr. Marie Kromah",
+      "publishedAt": "2026-04-18T00:00:00Z",
+      "updatedAt": "2026-04-18T00:00:00Z"
+    },
+    {
+      "id": "kno_okra_curl",
+      "cropId": "crop_okra",
+      "cropName": "Okra",
+      "topic": "Okra Leaf Curl Virus (OLCV)",
+      "category": "disease",
+      "symptomsDescription": "Upward leaf curling, thickened veins, yellowing of younger foliage, and stunted fruit production.",
+      "preventativeMeasures": "Destroy volunteer weeds around garden beds; plant border crops like maize to serve as physical barrier to whiteflies.",
+      "approvedOrganicTreatments": "Weekly foliar spraying with diluted garlic-chili or neem oil solution early in the morning.",
+      "approvedChemicalGuidance": "Insecticides do not cure the virus once the plant is infected. Rogueing is mandatory.",
+      "governanceStatus": "published",
+      "evidenceLevel": "government_bulletin",
+      "sourceName": "Liberia Ministry of Agriculture Horticulture Handbook",
+      "authorName": "Arthur Doe",
+      "reviewedByExpertName": "Dr. Marie Kromah",
+      "publishedAt": "2026-06-01T00:00:00Z",
+      "updatedAt": "2026-06-01T00:00:00Z"
+    }
+  ],
+  "feedback": [],
+  "auditLogs": [
+    {
+      "id": "log_1789399217772",
+      "actorId": "usr_expert_1",
+      "actorName": "Dr. Marie Kromah",
+      "actorRole": "expert",
+      "action": "EXPERT_ASSESSMENT_SUBMITTED",
+      "entityType": "expert_assessment",
+      "entityId": "asmt_1789399217771",
+      "details": "Expert Dr. Marie Kromah signed assessment v3 (Decision: confirmed) for case case_cmd_001",
+      "timestamp": "2026-09-14T15:20:17.772Z"
+    },
+    {
+      "id": "log_1789399217766",
+      "actorId": "usr_expert_1",
+      "actorName": "Dr. Marie Kromah",
+      "actorRole": "expert",
+      "action": "USER_LOGGED_IN",
+      "entityType": "user",
+      "entityId": "usr_expert_1",
+      "details": "User Dr. Marie Kromah logged in successfully",
+      "timestamp": "2026-09-14T15:20:17.766Z"
+    },
+    {
+      "id": "log_1789399217677",
+      "actorId": "usr_candidate_1",
+      "actorName": "Arthur Doe",
+      "actorRole": "expert",
+      "action": "USER_LOGGED_IN",
+      "entityType": "user",
+      "entityId": "usr_candidate_1",
+      "details": "User Arthur Doe logged in successfully",
+      "timestamp": "2026-09-14T15:20:17.677Z"
+    },
+    {
+      "id": "log_1789399217588",
+      "actorId": "usr_farmer_2",
+      "actorName": "Moses Kollie",
+      "actorRole": "farmer",
+      "action": "USER_LOGGED_IN",
+      "entityType": "user",
+      "entityId": "usr_farmer_2",
+      "details": "User Moses Kollie logged in successfully",
+      "timestamp": "2026-09-14T15:20:17.588Z"
+    },
+    {
+      "id": "log_1789399217497",
+      "actorId": "usr_farmer_2",
+      "actorName": "Moses Kollie",
+      "actorRole": "farmer",
+      "action": "USER_LOGGED_IN",
+      "entityType": "user",
+      "entityId": "usr_farmer_2",
+      "details": "User Moses Kollie logged in successfully",
+      "timestamp": "2026-09-14T15:20:17.497Z"
+    },
+    {
+      "id": "log_1789399217382",
+      "actorId": "usr_farmer_2",
+      "actorName": "Moses Kollie",
+      "actorRole": "farmer",
+      "action": "USER_LOGGED_IN",
+      "entityType": "user",
+      "entityId": "usr_farmer_2",
+      "details": "User Moses Kollie logged in successfully",
+      "timestamp": "2026-09-14T15:20:17.382Z"
+    },
+    {
+      "id": "log_1789399174973",
+      "actorId": "usr_expert_1",
+      "actorName": "Dr. Marie Kromah",
+      "actorRole": "expert",
+      "action": "EXPERT_ASSESSMENT_SUBMITTED",
+      "entityType": "expert_assessment",
+      "entityId": "asmt_1789399174972",
+      "details": "Expert Dr. Marie Kromah signed assessment v2 (Decision: confirmed) for case case_cmd_001",
+      "timestamp": "2026-09-14T15:19:34.973Z"
+    },
+    {
+      "id": "log_1789399174967",
+      "actorId": "usr_expert_1",
+      "actorName": "Dr. Marie Kromah",
+      "actorRole": "expert",
+      "action": "USER_LOGGED_IN",
+      "entityType": "user",
+      "entityId": "usr_expert_1",
+      "details": "User Dr. Marie Kromah logged in successfully",
+      "timestamp": "2026-09-14T15:19:34.967Z"
+    },
+    {
+      "id": "log_1789399174879",
+      "actorId": "usr_candidate_1",
+      "actorName": "Arthur Doe",
+      "actorRole": "expert",
+      "action": "USER_LOGGED_IN",
+      "entityType": "user",
+      "entityId": "usr_candidate_1",
+      "details": "User Arthur Doe logged in successfully",
+      "timestamp": "2026-09-14T15:19:34.879Z"
+    },
+    {
+      "id": "log_1789399174769",
+      "actorId": "usr_farmer_2",
+      "actorName": "Moses Kollie",
+      "actorRole": "farmer",
+      "action": "USER_LOGGED_IN",
+      "entityType": "user",
+      "entityId": "usr_farmer_2",
+      "details": "User Moses Kollie logged in successfully",
+      "timestamp": "2026-09-14T15:19:34.769Z"
+    },
+    {
+      "id": "log_1789399174672",
+      "actorId": "usr_farmer_2",
+      "actorName": "Moses Kollie",
+      "actorRole": "farmer",
+      "action": "USER_LOGGED_IN",
+      "entityType": "user",
+      "entityId": "usr_farmer_2",
+      "details": "User Moses Kollie logged in successfully",
+      "timestamp": "2026-09-14T15:19:34.672Z"
+    },
+    {
+      "id": "log_1789399174573",
+      "actorId": "usr_farmer_2",
+      "actorName": "Moses Kollie",
+      "actorRole": "farmer",
+      "action": "USER_LOGGED_IN",
+      "entityType": "user",
+      "entityId": "usr_farmer_2",
+      "details": "User Moses Kollie logged in successfully",
+      "timestamp": "2026-09-14T15:19:34.573Z"
+    },
+    {
+      "id": "log_seed_1",
+      "actorId": "usr_admin_1",
+      "actorName": "Helena Barclay",
+      "actorRole": "admin",
+      "action": "SYSTEM_INITIALIZED",
+      "entityType": "system",
+      "entityId": "root",
+      "details": "CropWatch Liberia system initialized with CARI & MOA agronomic baselines.",
+      "timestamp": "2026-09-14T06:45:00Z"
+    }
+  ],
+  "thresholds": {
+    "aiHighConfidenceCutoff": 0.9,
+    "aiMediumConfidenceCutoff": 0.7,
+    "rapidDeclineThresholdScore": 20,
+    "highRiskDiseases": [
+      "Cassava Mosaic Disease (CMD)",
+      "Cassava Brown Streak Disease (CBSD)",
+      "Rice Blast (Pyricularia oryzae)",
+      "Bacterial Panicle Blight",
+      "Fall Armyworm (Spodoptera frugiperda)"
+    ],
+    "mandatoryChemicalReview": true,
+    "autoEscalateDisagreement": true
+  }
+}

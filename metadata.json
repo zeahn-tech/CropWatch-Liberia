@@ -1,0 +1,10 @@
+{
+  "name": "CropWatch Liberia",
+  "description": "Continuous AI crop-health monitoring, early warning, and human-in-the-loop agricultural expert validation PWA for farmers.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
