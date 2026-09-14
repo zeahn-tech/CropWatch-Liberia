@@ -190,7 +190,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await res.json();
+      const text = await res.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (parseError) {
+        if (text.trim().startsWith('<')) {
+           throw new Error('Backend is not running. GitHub Pages only supports static files, not Node.js servers. Please deploy to Render, Vercel, or Cloud Run.');
+        }
+        throw new Error('Invalid JSON response from server.');
+      }
       if (!res.ok || !data.success) {
         throw new Error(data.error || 'Login failed. Please check credentials.');
       }

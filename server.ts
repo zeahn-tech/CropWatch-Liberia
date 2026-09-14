@@ -5,8 +5,9 @@ import { fileURLToPath } from 'url';
 import { createServer as createViteServer } from 'vite';
 import { apiRouter } from './server/apiRouter.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// ES Module compatibility for path resolution
+const _filename = typeof __filename !== 'undefined' ? __filename : (typeof import.meta !== 'undefined' && import.meta.url ? fileURLToPath(import.meta.url) : '');
+const _dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(_filename);
 
 async function startServer() {
   const app = express();

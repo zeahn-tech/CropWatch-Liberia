@@ -292,7 +292,16 @@ export default function App() {
         credentials: 'include',
         body: JSON.stringify({ userId }),
       });
-      const data = await res.json();
+      const text = await res.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (parseError) {
+        if (text.trim().startsWith('<')) {
+           throw new Error('Backend is not running. GitHub Pages only supports static files, not Node.js servers. Please deploy to Render, Vercel, or Cloud Run.');
+        }
+        throw new Error('Invalid JSON response from server.');
+      }
       if (data.success && data.token) {
         localStorage.setItem('cropwatch_token', data.token);
         setToken(data.token);
