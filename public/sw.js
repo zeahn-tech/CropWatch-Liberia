@@ -1,11 +1,11 @@
 // CropWatch Liberia Service Worker with Advanced Background Sync and Shell Caching
 const CACHE_NAME = 'cropwatch-static-v2';
 const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.webmanifest',
-  '/icon-192.png',
-  '/icon-512.png'
+  './',
+  './index.html',
+  './manifest.webmanifest',
+  './icon-192.png',
+  './icon-512.png'
 ];
 
 // Helper to open IndexedDB
@@ -179,7 +179,7 @@ self.addEventListener('fetch', (event) => {
             return cachedResponse;
           }
           if (event.request.headers.get('accept')?.includes('text/html')) {
-            return caches.match('/index.html');
+            return caches.match('./index.html');
           }
         });
       })
