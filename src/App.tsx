@@ -347,7 +347,7 @@ export default function App() {
       console.error('Logout request failed', err);
     }
     // Also sign out from Supabase client
-    supabase.auth.signOut().catch(() => {});
+    supabase?.auth.signOut().catch(() => {});
 
     localStorage.removeItem('cropwatch_token');
     setToken(null);

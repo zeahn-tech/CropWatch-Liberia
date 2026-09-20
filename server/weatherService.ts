@@ -33,9 +33,44 @@ export async function getCountyWeather(county: string): Promise<WeatherContext> 
   }
 
   const coords = LIBERIA_COUNTY_COORDINATES[normalizedCounty];
+  const openWeatherApiKey = process.env.WEATHER_API_KEY;
+
+  if (openWeatherApiKey) {
+    try {
+      const owmUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${coords.lat}&lon=${coords.lon}&units=metric&appid=${openWeatherApiKey}`;
+
+      const owmController = new AbortController();
+      const owmTimeoutId = setTimeout(() => owmController.abort(), 2500); // quick timeout
+
+      const owmResp = await fetch(owmUrl, { signal: owmController.signal });
+      clearTimeout(owmTimeoutId);
+
+      if (owmResp.ok) {
+        const owmData = await owmResp.json();
+        const tempC = Math.round(owmData.main?.temp ?? 28);
+        const humidity = Math.round(owmData.main?.humidity ?? 85);
+        // OpenWeatherMap's free /weather endpoint only reports recent rain
+        // volume (last 1h or 3h), not a 24h total, so extrapolate roughly.
+        const rainVolumeMm = owmData.rain?.['1h'] * 24 || owmData.rain?.['3h'] * 8 || 14.5;
+        const rain24hMm = Number(rainVolumeMm.toFixed(1));
+
+        const weatherResult = buildWeatherContext(normalizedCounty, tempC, humidity, rain24hMm);
+        weatherCache[cacheKey] = {
+          weather: weatherResult,
+          expiresAt: Date.now() + CACHE_TTL_MS,
+        };
+        return weatherResult;
+      }
+      console.warn(`OpenWeatherMap returned ${owmResp.status} for ${normalizedCounty}; falling back to Open-Meteo.`);
+    } catch (err) {
+      console.warn(`OpenWeatherMap lookup failed for ${normalizedCounty}; falling back to Open-Meteo.`);
+    }
+  }
 
   try {
-    // Open-Meteo free agro-weather endpoint (no API key needed)
+    // Open-Meteo free agro-weather endpoint (no API key needed) — used
+    // whenever WEATHER_API_KEY isn't set, or as a fallback if OpenWeatherMap
+    // fails or the key is invalid.
     const url = `https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&current=temperature_2m,relative_humidity_2m,precipitation&daily=precipitation_sum,temperature_2m_max,temperature_2m_min&timezone=Africa/Monrovia`;
     
     const controller = new AbortController();

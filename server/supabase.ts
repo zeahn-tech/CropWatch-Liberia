@@ -1,24 +1,24 @@
 import { createClient, SupabaseClient, User as SupabaseUser } from '@supabase/supabase-js';
 import { User, PlantObservation, ExpertReviewCase, Farm, CropPlanting } from '../src/types.js';
 
-export const SUPABASE_URL =
-  process.env.SUPABASE_URL ||
-  process.env.VITE_SUPABASE_URL ||
-  'https://fdpikbdoheqezvrbteol.supabase.co';
+// No hardcoded fallback: if these aren't set via environment variables,
+// Supabase-backed features (auth verification, cross-sync) are disabled
+// rather than silently pointing at an undocumented default project.
+export const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '';
 
 export const SUPABASE_ANON_KEY =
-  process.env.SUPABASE_ANON_KEY ||
-  process.env.VITE_SUPABASE_ANON_KEY ||
-  'sb_publishable_qaSud_UgbdYJB_Q56zSJOQ_GSnKG0Fe';
+  process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || '';
 
 export const isSupabaseConfigured = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
 
-export const supabaseServer: SupabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-  auth: {
-    persistSession: false,
-    autoRefreshToken: false,
-  },
-});
+export const supabaseServer: SupabaseClient | null = isSupabaseConfigured
+  ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      },
+    })
+  : null;
 
 /**
  * Verifies a Supabase JWT or session access token
@@ -26,7 +26,7 @@ export const supabaseServer: SupabaseClient = createClient(SUPABASE_URL, SUPABAS
 export async function verifySupabaseToken(token: string): Promise<SupabaseUser | null> {
   if (!token || !isSupabaseConfigured) return null;
   try {
-    const { data, error } = await supabaseServer.auth.getUser(token);
+    const { data, error } = await supabaseServer!.auth.getUser(token);
     if (error || !data.user) {
       return null;
     }
@@ -82,7 +82,7 @@ export async function checkSupabaseStatus(): Promise<{
 
   for (const table of checkTables) {
     try {
-      const { error } = await supabaseServer.from(table).select('id').limit(1);
+      const { error } = await supabaseServer!.from(table).select('id').limit(1);
       // If error is not PGRST205 (table not found), it exists!
       if (!error || error.code !== 'PGRST205') {
         tablesFound.push(table);
@@ -113,7 +113,7 @@ export async function checkSupabaseStatus(): Promise<{
 export async function trySyncRecordToSupabase(table: string, record: Record<string, any>): Promise<boolean> {
   if (!isSupabaseConfigured) return false;
   try {
-    const { error } = await supabaseServer.from(table).upsert(record);
+    const { error } = await supabaseServer!.from(table).upsert(record);
     if (error) {
       // Table may not exist yet in user's Supabase project, which is normal until schema is run
       return false;
