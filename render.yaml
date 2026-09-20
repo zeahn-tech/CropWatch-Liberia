@@ -1,0 +1,59 @@
+services:
+  - type: web
+    name: cropwatch-liberia
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: 22.14.0
+      - key: NODE_ENV
+        value: production
+      # Secrets below are declared here so Render prompts for them on first
+      # deploy, but their actual values are NEVER stored in this file or in
+      # git -- set them in the Render Dashboard (Environment tab) instead.
+      - key: JWT_SECRET
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: S3_BUCKET_NAME
+        sync: false
+      - key: S3_REGION
+        sync: false
+      - key: S3_ACCESS_KEY_ID
+        sync: false
+      - key: S3_SECRET_ACCESS_KEY
+        sync: false
+      - key: S3_ENDPOINT
+        sync: false
+      - key: WEATHER_API_KEY
+        sync: false
+      - key: DAILY_AI_ANALYSES_LIMIT
+        value: "5"
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: VITE_SUPABASE_URL
+        sync: false
+      - key: VITE_SUPABASE_ANON_KEY
+        sync: false
+    # NOTE: this service currently stores its SQLite database at ./data on
+    # local disk. Render's default filesystem is EPHEMERAL: every deploy,
+    # restart, or scaling event wipes it. Either:
+    #   1. Attach a persistent Disk (requires a paid instance plan) mounted
+    #      at the app's working directory + /data, e.g.:
+    #        disk:
+    #          name: cropwatch-data
+    #          mountPath: /opt/render/project/src/data
+    #          sizeGB: 1
+    #      (uncomment and adjust mountPath to match your actual deploy path
+    #      -- confirm via `pwd` in a Render shell session), or
+    #   2. Treat this deployment as a demo/pilot where data resetting on
+    #      every deploy is acceptable, or
+    #   3. Migrate to the already-supported Supabase/Postgres path instead
+    #      of local SQLite for anything you need to persist long-term.
+    # See DEPLOYMENT.md for details.

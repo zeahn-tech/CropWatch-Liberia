@@ -6,3 +6,8 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Local SQLite database -- this holds real account data (emails, bcrypt
+# password hashes) and must never be committed. On Render this data lives
+# on ephemeral disk unless you attach a persistent Disk (see render.yaml).
+data/

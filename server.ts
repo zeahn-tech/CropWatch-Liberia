@@ -11,7 +11,7 @@ const _dirname = typeof __dirname !== 'undefined' ? __dirname : path.dirname(_fi
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 
   // Middleware for cookies and JSON parsing with large limit for image data URLs
   app.use(cookieParser());
