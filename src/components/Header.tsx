@@ -13,6 +13,8 @@ import {
   User as UserIcon,
   ShieldCheck,
   Terminal,
+  LayoutGrid,
+  BookOpen,
 } from 'lucide-react';
 import { User, ExpertProfile } from '../types.js';
 import { OfflinePendingScan } from '../lib/offlineDb.js';
@@ -84,130 +86,173 @@ export const Header: React.FC<HeaderProps> = ({
     }
   };
 
+  const navItems: Array<{
+    id: 'farmer' | 'expert' | 'knowledge' | 'admin';
+    label: string;
+    shortLabel: string;
+    icon: React.ReactNode;
+    activeClasses: string;
+  }> = [
+    {
+      id: 'farmer',
+      label: 'Farm Monitor',
+      shortLabel: 'Monitor',
+      icon: <LayoutGrid className="w-5 h-5" />,
+      activeClasses: 'text-emerald-400',
+    },
+    {
+      id: 'expert',
+      label: 'Expert Review',
+      shortLabel: 'Review',
+      icon: <UserCheck className="w-5 h-5" />,
+      activeClasses: 'text-blue-400',
+    },
+    {
+      id: 'knowledge',
+      label: 'Knowledge Base',
+      shortLabel: 'Learn',
+      icon: <BookOpen className="w-5 h-5" />,
+      activeClasses: 'text-stone-200',
+    },
+    {
+      id: 'admin',
+      label: 'Admin',
+      shortLabel: 'Admin',
+      icon: <ShieldAlert className="w-5 h-5" />,
+      activeClasses: 'text-amber-400',
+    },
+  ];
+
   return (
-    <header className="sticky top-0 z-40 bg-stone-900 border-b border-stone-800 shadow-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo & National Agricultural Context */}
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-emerald-600 flex items-center justify-center text-white shadow-inner font-bold">
-              <Sprout className="w-6 h-6" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-lg text-stone-100 tracking-tight">CropWatch Liberia</span>
-                <span className="hidden md:inline-block text-xs bg-stone-800 text-stone-300 px-2 py-0.5 rounded border border-stone-700">
-                  CARI & MOA Pilot
-                </span>
-                {isDemoMode && (
-                  <span className="inline-flex items-center gap-1 text-[10px] font-semibold bg-amber-950/80 text-amber-300 border border-amber-800/80 px-2 py-0.5 rounded">
-                    <Terminal className="w-3 h-3" /> DEMO MODE
-                  </span>
-                )}
+    <>
+      <header className="sticky top-0 z-40 bg-stone-900 border-b border-stone-800 shadow-md">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-14 sm:h-16 gap-2">
+            {/* Logo & National Agricultural Context */}
+            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 shrink-0 rounded-lg bg-emerald-600 flex items-center justify-center text-white shadow-inner font-bold">
+                <Sprout className="w-5 h-5 sm:w-6 sm:h-6" />
               </div>
-              <p className="text-xs text-stone-400 hidden sm:block">AI & Human-in-the-Loop Crop Health Decision Platform</p>
+              <div className="min-w-0">
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className="font-bold text-base sm:text-lg text-stone-100 tracking-tight truncate">
+                    CropWatch Liberia
+                  </span>
+                  <span className="hidden md:inline-block shrink-0 text-xs bg-stone-800 text-stone-300 px-2 py-0.5 rounded border border-stone-700">
+                    CARI & MOA Pilot
+                  </span>
+                  {isDemoMode && (
+                    <span className="inline-flex shrink-0 items-center gap-1 text-[10px] font-semibold bg-amber-950/80 text-amber-300 border border-amber-800/80 px-2 py-0.5 rounded">
+                      <Terminal className="w-3 h-3" /> DEMO
+                    </span>
+                  )}
+                </div>
+                <p className="text-xs text-stone-400 hidden lg:block truncate">
+                  AI & Human-in-the-Loop Crop Health Decision Platform
+                </p>
+              </div>
             </div>
-          </div>
 
-          {/* Primary View Navigation */}
-          <nav className="flex items-center gap-1 bg-stone-950 p-1 rounded-lg border border-stone-800">
-            <button
-              onClick={() => setActiveView('farmer')}
-              className={`px-3 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-colors ${
-                activeView === 'farmer'
-                  ? 'bg-emerald-700 text-white shadow-sm'
-                  : 'text-stone-400 hover:text-stone-200 hover:bg-stone-900'
-              }`}
-            >
-              Farm Monitor
-            </button>
-
-            <button
-              onClick={() => setActiveView('expert')}
-              className={`px-3 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-colors relative ${
-                activeView === 'expert'
-                  ? 'bg-blue-700 text-white shadow-sm'
-                  : 'text-stone-400 hover:text-stone-200 hover:bg-stone-900'
-              }`}
-            >
-              Expert Review
-              <span className="ml-1.5 px-1.5 py-0.2 bg-blue-900 text-blue-200 text-[10px] rounded-full hidden md:inline">
-                Center
-              </span>
-            </button>
-
-            <button
-              onClick={() => setActiveView('knowledge')}
-              className={`px-3 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-colors hidden sm:inline-block ${
-                activeView === 'knowledge'
-                  ? 'bg-stone-700 text-white shadow-sm'
-                  : 'text-stone-400 hover:text-stone-200 hover:bg-stone-900'
-              }`}
-            >
-              Knowledge Base
-            </button>
-
-            <button
-              onClick={() => setActiveView('admin')}
-              className={`px-3 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-colors ${
-                activeView === 'admin'
-                  ? 'bg-amber-700 text-white shadow-sm'
-                  : 'text-stone-400 hover:text-stone-200 hover:bg-stone-900'
-              }`}
-            >
-              Admin
-            </button>
-          </nav>
-
-          {/* Right Controls: Connectivity & Persona Switcher */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            {/* Offline Simulation Toggle & Sync */}
-            <div className="flex items-center gap-1">
+            {/* Primary View Navigation — desktop / tablet only, mobile uses bottom tab bar */}
+            <nav className="hidden md:flex items-center gap-1 bg-stone-950 p-1 rounded-lg border border-stone-800 shrink-0">
               <button
-                onClick={onToggleOnlineMode}
-                title="Toggle Online/Offline Network Simulation"
-                className={`flex items-center gap-1.5 px-2 py-1 rounded text-xs border transition-colors ${
-                  isOnline
-                    ? 'bg-emerald-950/70 border-emerald-800 text-emerald-300'
-                    : 'bg-red-950/70 border-red-800 text-red-300 animate-pulse'
+                onClick={() => setActiveView('farmer')}
+                className={`px-3 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-colors ${
+                  activeView === 'farmer'
+                    ? 'bg-emerald-700 text-white shadow-sm'
+                    : 'text-stone-400 hover:text-stone-200 hover:bg-stone-900'
                 }`}
               >
-                {isOnline ? <Wifi className="w-3.5 h-3.5" /> : <WifiOff className="w-3.5 h-3.5" />}
-                <span className="hidden md:inline">{isOnline ? 'Online' : 'Offline Mode'}</span>
+                Farm Monitor
               </button>
 
-              {pendingScans.length > 0 && (
-                <button
-                  onClick={onSyncPendingScans}
-                  disabled={!isOnline || isSyncing}
-                  className="flex items-center gap-1 px-2.5 py-1 rounded text-xs bg-amber-600 hover:bg-amber-500 text-white font-medium shadow-sm transition-all disabled:opacity-50"
-                  title="Upload queued offline observations"
-                >
-                  <RefreshCw className={`w-3 h-3 ${isSyncing ? 'animate-spin' : ''}`} />
-                  <span>Sync ({pendingScans.length})</span>
-                </button>
-              )}
-            </div>
+              <button
+                onClick={() => setActiveView('expert')}
+                className={`px-3 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-colors relative ${
+                  activeView === 'expert'
+                    ? 'bg-blue-700 text-white shadow-sm'
+                    : 'text-stone-400 hover:text-stone-200 hover:bg-stone-900'
+                }`}
+              >
+                Expert Review
+                <span className="ml-1.5 px-1.5 py-0.2 bg-blue-900 text-blue-200 text-[10px] rounded-full hidden lg:inline">
+                  Center
+                </span>
+              </button>
 
-            {/* Persona Switcher / Auth Control */}
-            {currentUser ? (
-              <div className="relative">
+              <button
+                onClick={() => setActiveView('knowledge')}
+                className={`px-3 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-colors ${
+                  activeView === 'knowledge'
+                    ? 'bg-stone-700 text-white shadow-sm'
+                    : 'text-stone-400 hover:text-stone-200 hover:bg-stone-900'
+                }`}
+              >
+                Knowledge Base
+              </button>
+
+              <button
+                onClick={() => setActiveView('admin')}
+                className={`px-3 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-colors ${
+                  activeView === 'admin'
+                    ? 'bg-amber-700 text-white shadow-sm'
+                    : 'text-stone-400 hover:text-stone-200 hover:bg-stone-900'
+                }`}
+              >
+                Admin
+              </button>
+            </nav>
+
+            {/* Right Controls: Connectivity & Persona Switcher */}
+            <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+              {/* Offline Simulation Toggle & Sync */}
+              <div className="flex items-center gap-1">
                 <button
-                  onClick={() => setShowUserDropdown(!showUserDropdown)}
-                  className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-stone-800 hover:bg-stone-750 border border-stone-700 text-stone-200 text-xs transition-colors"
+                  onClick={onToggleOnlineMode}
+                  title="Toggle Online/Offline Network Simulation"
+                  className={`flex items-center gap-1.5 px-1.5 sm:px-2 py-1 rounded text-xs border transition-colors ${
+                    isOnline
+                      ? 'bg-emerald-950/70 border-emerald-800 text-emerald-300'
+                      : 'bg-red-950/70 border-red-800 text-red-300 animate-pulse'
+                  }`}
                 >
-                  <div className="w-6 h-6 rounded-full bg-emerald-700 text-white flex items-center justify-center font-bold text-xs">
-                    {currentUser.fullName ? currentUser.fullName.charAt(0) : 'U'}
-                  </div>
-                  <div className="text-left hidden sm:block">
-                    <p className="font-semibold text-stone-200 leading-none">{currentUser.fullName}</p>
-                    <p className="text-[10px] text-stone-400 capitalize">{currentUser.county} Co.</p>
-                  </div>
-                  <ChevronDown className="w-3.5 h-3.5 text-stone-400" />
+                  {isOnline ? <Wifi className="w-3.5 h-3.5" /> : <WifiOff className="w-3.5 h-3.5" />}
+                  <span className="hidden md:inline">{isOnline ? 'Online' : 'Offline Mode'}</span>
                 </button>
+
+                {pendingScans.length > 0 && (
+                  <button
+                    onClick={onSyncPendingScans}
+                    disabled={!isOnline || isSyncing}
+                    className="flex items-center gap-1 px-1.5 sm:px-2.5 py-1 rounded text-xs bg-amber-600 hover:bg-amber-500 text-white font-medium shadow-sm transition-all disabled:opacity-50"
+                    title="Upload queued offline observations"
+                  >
+                    <RefreshCw className={`w-3 h-3 ${isSyncing ? 'animate-spin' : ''}`} />
+                    <span className="hidden sm:inline">Sync ({pendingScans.length})</span>
+                    <span className="sm:hidden">{pendingScans.length}</span>
+                  </button>
+                )}
+              </div>
+
+              {/* Persona Switcher / Auth Control */}
+              {currentUser ? (
+                <div className="relative">
+                  <button
+                    onClick={() => setShowUserDropdown(!showUserDropdown)}
+                    className="flex items-center gap-1.5 sm:gap-2 px-1.5 sm:px-2.5 py-1.5 rounded-lg bg-stone-800 hover:bg-stone-750 border border-stone-700 text-stone-200 text-xs transition-colors"
+                  >
+                    <div className="w-6 h-6 rounded-full bg-emerald-700 text-white flex items-center justify-center font-bold text-xs shrink-0">
+                      {currentUser.fullName ? currentUser.fullName.charAt(0) : 'U'}
+                    </div>
+                    <div className="text-left hidden sm:block">
+                      <p className="font-semibold text-stone-200 leading-none">{currentUser.fullName}</p>
+                      <p className="text-[10px] text-stone-400 capitalize">{currentUser.county} Co.</p>
+                    </div>
+                    <ChevronDown className="w-3.5 h-3.5 text-stone-400 hidden sm:block" />
+                  </button>
 
                 {showUserDropdown && (
-                  <div className="absolute right-0 mt-2 w-72 bg-stone-900 border border-stone-800 rounded-xl shadow-2xl py-2 z-50">
+                  <div className="absolute right-0 mt-2 w-[min(18rem,calc(100vw-1.5rem))] bg-stone-900 border border-stone-800 rounded-xl shadow-2xl py-2 z-50 max-h-[75vh] overflow-y-auto">
                     <div className="px-3 py-2 border-b border-stone-800">
                       <p className="text-[11px] uppercase tracking-wider text-stone-400 font-semibold">Active Session</p>
                       <p className="text-sm font-bold text-white">{currentUser.fullName}</p>
@@ -303,6 +348,32 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
       </div>
-    </header>
+      </header>
+
+      {/* Mobile Bottom Tab Bar — replaces in-header nav below md breakpoint */}
+      <nav
+        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-stone-900 border-t border-stone-800 shadow-[0_-2px_8px_rgba(0,0,0,0.3)] pb-[env(safe-area-inset-bottom)]"
+        aria-label="Primary"
+      >
+        <div className="grid grid-cols-4">
+          {navItems.map((item) => {
+            const isActive = activeView === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => setActiveView(item.id)}
+                className={`flex flex-col items-center justify-center gap-0.5 py-2 min-h-[3.25rem] transition-colors ${
+                  isActive ? item.activeClasses : 'text-stone-500 hover:text-stone-300'
+                }`}
+                aria-current={isActive ? 'page' : undefined}
+              >
+                {item.icon}
+                <span className="text-[10px] font-medium leading-none">{item.shortLabel}</span>
+              </button>
+            );
+          })}
+        </div>
+      </nav>
+    </>
   );
 };

@@ -656,11 +656,11 @@ export default function App() {
 
       {/* Unauthenticated Alert Banner */}
       {!currentUser && !authLoading && (
-        <div className="bg-amber-950/40 border-b border-amber-900/60 py-2.5 px-4 text-center text-xs text-amber-200 flex items-center justify-center gap-3">
+        <div className="bg-amber-950/40 border-b border-amber-900/60 py-2.5 px-4 text-center text-xs text-amber-200 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3">
           <span>You are viewing CropWatch Liberia as an unauthenticated guest. Sign in to access your farm data.</span>
           <button
             onClick={() => setAuthModalOpen(true)}
-            className="px-3 py-1 bg-amber-600 hover:bg-amber-500 text-stone-950 font-semibold rounded text-xs transition-colors"
+            className="shrink-0 px-3 py-1 bg-amber-600 hover:bg-amber-500 text-stone-950 font-semibold rounded text-xs transition-colors"
           >
             Sign In / Register
           </button>
@@ -668,7 +668,7 @@ export default function App() {
       )}
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-24 md:pb-12">
         {activeView === 'farmer' && (
           <FarmerDashboard
             user={
