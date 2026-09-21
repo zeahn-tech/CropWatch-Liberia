@@ -24,15 +24,33 @@ export const supabaseServer: SupabaseClient | null = isSupabaseConfigured
  * Verifies a Supabase JWT or session access token
  */
 export async function verifySupabaseToken(token: string): Promise<SupabaseUser | null> {
-  if (!token || !isSupabaseConfigured) return null;
+  if (!token) return null;
+  if (!isSupabaseConfigured) {
+    console.warn(
+      'verifySupabaseToken: rejected because Supabase is not configured on the server ' +
+        '(SUPABASE_URL/SUPABASE_ANON_KEY, or their VITE_ equivalents, are missing).'
+    );
+    return null;
+  }
   try {
     const { data, error } = await supabaseServer!.auth.getUser(token);
-    if (error || !data.user) {
+    if (error) {
+      // Logging the real reason here is what actually lets you tell apart:
+      // - a genuinely expired/invalid token (user should just sign in again)
+      // - a project mismatch (frontend VITE_SUPABASE_URL points at a
+      //   different Supabase project than the server's SUPABASE_URL, so the
+      //   JWT signature never validates -- this looks identical to "expired"
+      //   from the client but is actually a config bug)
+      console.error(
+        `verifySupabaseToken: Supabase rejected the token (status ${error.status ?? 'n/a'}): ${error.message}. ` +
+          `Server is configured against project: ${SUPABASE_URL}`
+      );
       return null;
     }
+    if (!data.user) return null;
     return data.user;
   } catch (err) {
-    console.error('Failed to verify Supabase token:', err);
+    console.error('verifySupabaseToken: unexpected exception while verifying token:', err);
     return null;
   }
 }

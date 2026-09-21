@@ -9,7 +9,7 @@ services:
     healthCheckPath: /api/health
     envVars:
       - key: NODE_VERSION
-        value: 22.14.0
+        value: 22.22.0
       - key: NODE_ENV
         value: production
       # Secrets below are declared here so Render prompts for them on first

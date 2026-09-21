@@ -12,10 +12,20 @@ Node's built-in `node:sqlite` module. The schema and seed data (such as user acc
 crops) are created **automatically on first run** by the application server. You do not need to
 run manual migration or seeding scripts.
 
-**Node version requirement:** `node:sqlite` requires **Node.js 22.13.0 or newer** to work without
-a CLI flag. This repo pins a compatible version via `.node-version` and `package.json`'s `engines`
-field, so this should be handled automatically on Render -- but if you deploy elsewhere, confirm
-the platform is actually honoring that pin (check the Node version printed in your build logs).
+**Node version requirement:** the app's ORM layer (`drizzle-orm`'s `node-sqlite` dialect) calls
+`StatementSync.prototype.setReturnArrays()`, a `node:sqlite` method Node's own docs list as
+`added: v24.0.0` -- but which is also present (evidently backported) on at least Node 22.22.x.
+It is confirmed **absent on Node 22.14.0**, which caused every database query to throw
+`TypeError: stmt.setReturnArrays is not a function` and crash the server on every request that
+touched the database (including login) in production. This repo pins `.node-version` to `22.22.0`
+-- a version verified end-to-end against this exact codebase -- as the floor. If you ever change
+this pin, verify `stmt.setReturnArrays` actually exists on the target version first:
+```
+node -e "const {DatabaseSync}=require('node:sqlite'); const db=new DatabaseSync(':memory:'); console.log(typeof db.prepare('SELECT 1').setReturnArrays)"
+```
+This should print `function`, not `undefined`. Note that `.github/workflows/ci.yml` already runs
+on Node 24 -- which is why CI never caught this: production and CI were silently running different
+Node versions. Consider keeping them aligned going forward.
 
 **Persistence warning:** Render's default filesystem is **ephemeral** -- every deploy, restart, or
 scaling event wipes anything written to local disk, including `data/cropwatch.db`. This means, by
@@ -59,9 +69,11 @@ storing real values in git.
   assigned port, and the deploy would be marked failed. This is now fixed in `server.ts`
   (`process.env.PORT` is read first, falling back to 3000 only for local dev).
 - **No pinned Node version** meant the app could land on whatever Node version Render defaults to
-  for new services at the time -- if that ever fell below 22.13.0, `node:sqlite` would throw
-  immediately on import and crash the server at startup. Now pinned via `.node-version` /
-  `engines`.
+  for new services at the time. A pin to `22.14.0` specifically was tried and failed in production:
+  `drizzle-orm`'s SQLite driver calls a `node:sqlite` method not present at that exact patch,
+  crashing the server on every database query (including login) with
+  `TypeError: stmt.setReturnArrays is not a function`. Now pinned to `22.22.0`, verified working
+  end-to-end.
 
 ## 3. Verifying a successful deploy
 

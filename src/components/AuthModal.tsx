@@ -22,6 +22,31 @@ import {
   isSupabaseConfigured,
 } from '../lib/supabase.js';
 
+/**
+ * Parses a fetch Response as JSON, but fails with a clear, actionable message
+ * instead of the browser's cryptic "Unexpected end of JSON input" when the
+ * server returns an empty or non-JSON body -- which happens if the backend
+ * process crashes mid-request (e.g. an unhandled exception) or a platform
+ * proxy returns an HTML error page (e.g. a 502 during a cold start).
+ */
+async function safeParseJson(response: Response): Promise<any> {
+  const raw = await response.text();
+  if (!raw) {
+    throw new Error(
+      response.ok
+        ? 'Server returned an empty response. Please try again.'
+        : `Server error (${response.status}). Please try again in a moment.`
+    );
+  }
+  try {
+    return JSON.parse(raw);
+  } catch {
+    throw new Error(
+      `Unexpected response from server (status ${response.status}). It may be temporarily unavailable -- please try again.`
+    );
+  }
+}
+
 interface AuthModalProps {
   isOpen: boolean;
   onClose?: () => void;
@@ -107,7 +132,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           }),
         });
 
-        const syncData = await syncRes.json();
+        const syncData = await safeParseJson(syncRes);
         if (!syncRes.ok || !syncData.success) {
           throw new Error(syncData.error || 'Could not synchronize cloud profile with backend.');
         }
@@ -157,8 +182,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           }),
         });
 
-        const syncData = await syncRes.json();
-        onLoginSuccess(syncData.token, syncData.user, syncData.expertProfile);
+        const syncData = await safeParseJson(syncRes);
         if (onClose) onClose();
       } else {
         // User created, confirmation email sent
