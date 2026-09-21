@@ -245,16 +245,21 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
-      <div className="bg-stone-900 border border-stone-800 rounded-2xl w-full max-w-lg p-6 shadow-2xl relative my-8">
+    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-black/80 backdrop-blur-sm overflow-y-auto sm:p-4">
+      <div
+        className="bg-stone-900 sm:border sm:border-stone-800 rounded-none sm:rounded-2xl w-full min-h-[100dvh] sm:min-h-0 sm:max-w-lg p-5 sm:p-6 shadow-2xl relative sm:my-8"
+      >
         {onClose && (
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-stone-400 hover:text-stone-200 p-1.5 rounded-lg hover:bg-stone-800 transition-colors"
+            className="absolute right-4 text-stone-400 hover:text-stone-200 p-1.5 rounded-lg hover:bg-stone-800 transition-colors"
+            style={{ top: 'max(1rem, calc(env(safe-area-inset-top) + 0.5rem))' }}
           >
             <X className="w-5 h-5" />
           </button>
         )}
+
+        <div style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
 
         {/* Supabase Status Header */}
         <div className="text-center mb-5">
@@ -623,6 +628,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             </div>
           </form>
         )}
+        </div>
       </div>
     </div>
   );

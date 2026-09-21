@@ -15,6 +15,8 @@ import {
   Terminal,
   LayoutGrid,
   BookOpen,
+  Menu,
+  X,
 } from 'lucide-react';
 import { User, ExpertProfile } from '../types.js';
 import { OfflinePendingScan } from '../lib/offlineDb.js';
@@ -53,6 +55,7 @@ export const Header: React.FC<HeaderProps> = ({
   onLogout,
 }) => {
   const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const getRoleBadge = (role: string) => {
     switch (role) {
@@ -203,8 +206,9 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
             </nav>
 
-            {/* Right Controls: Connectivity & Persona Switcher */}
+            {/* Right Controls: Connectivity & Persona Switcher (desktop / tablet) */}
             <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+              <div className="hidden md:flex items-center gap-3">
               {/* Offline Simulation Toggle & Sync */}
               <div className="flex items-center gap-1">
                 <button
@@ -345,35 +349,224 @@ export const Header: React.FC<HeaderProps> = ({
                 <span>Sign In</span>
               </button>
             )}
+              </div>
+
+              {/* Mobile-only: single drawer trigger replaces all controls above */}
+              <button
+                onClick={() => setMobileMenuOpen((v) => !v)}
+                aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+                aria-expanded={mobileMenuOpen}
+                className="md:hidden relative inline-flex items-center justify-center w-9 h-9 rounded-lg border border-stone-700 bg-stone-800 hover:bg-stone-750 text-stone-200 transition-colors"
+              >
+                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                {!mobileMenuOpen && !isOnline && (
+                  <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-red-500 border-2 border-stone-900" />
+                )}
+                {!mobileMenuOpen && pendingScans.length > 0 && (
+                  <span className="absolute -bottom-1.5 -right-1.5 min-w-[16px] h-4 px-1 rounded-full bg-amber-500 text-[9px] font-bold text-stone-950 flex items-center justify-center border-2 border-stone-900">
+                    {pendingScans.length}
+                  </span>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile Drawer — single trigger opens/closes a full-height slide-in panel
+          holding nav, account, and connectivity controls (replaces separate
+          top-bar buttons + bottom tab bar on small screens) */}
+      <div
+        className={`md:hidden fixed inset-0 z-50 transition-opacity duration-300 ${
+          mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+        aria-hidden={!mobileMenuOpen}
+      >
+        <div className="absolute inset-0 bg-black/60" onClick={() => setMobileMenuOpen(false)} />
+
+        <div
+          className={`absolute right-0 top-0 h-full w-[85%] max-w-xs bg-stone-900 border-l border-stone-800 shadow-2xl flex flex-col transition-transform duration-300 ease-out ${
+            mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
+          style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}
+        >
+          {/* Drawer Header */}
+          <div className="flex items-center justify-between px-4 h-14 border-b border-stone-800 shrink-0">
+            <div className="flex items-center gap-2 min-w-0">
+              <div className="w-7 h-7 rounded-md bg-emerald-600 flex items-center justify-center text-white shrink-0">
+                <Sprout className="w-4 h-4" />
+              </div>
+              <span className="font-bold text-sm text-stone-100 truncate">Menu</span>
+            </div>
+            <button
+              onClick={() => setMobileMenuOpen(false)}
+              aria-label="Close menu"
+              className="w-8 h-8 inline-flex items-center justify-center rounded-lg text-stone-400 hover:text-stone-200 hover:bg-stone-800 transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Drawer Body */}
+          <div className="flex-1 overflow-y-auto">
+            {/* Account Section */}
+            <div className="p-4 border-b border-stone-800">
+              {currentUser ? (
+                <>
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 rounded-full bg-emerald-700 text-white flex items-center justify-center font-bold shrink-0">
+                      {currentUser.fullName ? currentUser.fullName.charAt(0) : 'U'}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-semibold text-stone-100 truncate">{currentUser.fullName}</p>
+                      <p className="text-xs text-stone-400 truncate">
+                        {currentUser.email || `${currentUser.county} Co.`}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between mb-3">
+                    {getRoleBadge(currentUser.role)}
+                    {currentUser.supabaseId ? (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-800 font-mono">
+                        <Sprout className="w-2.5 h-2.5" /> Cloud Auth
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] bg-stone-800 text-stone-400 border border-stone-700 font-mono">
+                        <Sprout className="w-2.5 h-2.5" /> Connected
+                      </span>
+                    )}
+                  </div>
+
+                  {isDemoMode && allDemoUsers.length > 0 && (
+                    <div className="mb-3 p-2.5 rounded-lg bg-amber-950/20 border border-amber-900/50">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <p className="text-[10px] uppercase font-bold text-amber-400 flex items-center gap-1">
+                          <Terminal className="w-3 h-3" /> Demo Switcher
+                        </p>
+                        <span className="text-[9px] text-amber-500/80 bg-amber-950 px-1.5 py-0.5 rounded border border-amber-800">
+                          Local Dev Only
+                        </span>
+                      </div>
+                      <div className="max-h-40 overflow-y-auto space-y-1">
+                        {allDemoUsers.map((u) => (
+                          <button
+                            key={u.id}
+                            onClick={() => {
+                              onSwitchUser(u.id);
+                              setMobileMenuOpen(false);
+                            }}
+                            className={`w-full text-left px-2 py-1.5 rounded text-xs flex items-center justify-between transition-colors ${
+                              currentUser.id === u.id
+                                ? 'bg-amber-900/40 text-amber-300 font-semibold border border-amber-700/50'
+                                : 'text-stone-300 hover:bg-stone-800/80'
+                            }`}
+                          >
+                            <div className="min-w-0">
+                              <p className="font-medium truncate">{u.fullName}</p>
+                              <p className="text-[10px] text-stone-400 capitalize truncate">
+                                {u.role.replace('_', ' ')} • {u.county}
+                              </p>
+                            </div>
+                            {currentUser.id === u.id && (
+                              <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0 ml-2" />
+                            )}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        onOpenAuthModal();
+                      }}
+                      className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs text-stone-300 bg-stone-800 hover:bg-stone-750 border border-stone-700 transition-colors"
+                    >
+                      <UserIcon className="w-4 h-4" /> Switch
+                    </button>
+                    <button
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        onLogout();
+                      }}
+                      className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-xs text-red-400 bg-red-950/30 hover:bg-red-950/50 border border-red-900/50 transition-colors"
+                    >
+                      <LogOut className="w-4 h-4" /> Sign Out
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onOpenAuthModal();
+                  }}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold shadow-md transition-colors"
+                >
+                  <LogIn className="w-4 h-4" /> Sign In / Register
+                </button>
+              )}
+            </div>
+
+            {/* Navigation Section */}
+            <div className="p-2 border-b border-stone-800">
+              <p className="px-2 pt-1 pb-2 text-[10px] uppercase tracking-wider text-stone-500 font-semibold">
+                Navigate
+              </p>
+              {navItems.map((item) => {
+                const isActive = activeView === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => {
+                      setActiveView(item.id);
+                      setMobileMenuOpen(false);
+                    }}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                      isActive ? `bg-stone-800 ${item.activeClasses}` : 'text-stone-300 hover:bg-stone-800/60'
+                    }`}
+                    aria-current={isActive ? 'page' : undefined}
+                  >
+                    {item.icon}
+                    {item.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Connectivity Section */}
+            <div className="p-3 space-y-2">
+              <p className="px-1 pb-1 text-[10px] uppercase tracking-wider text-stone-500 font-semibold">
+                Connectivity
+              </p>
+              <button
+                onClick={onToggleOnlineMode}
+                className={`w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium border transition-colors ${
+                  isOnline
+                    ? 'bg-emerald-950/70 border-emerald-800 text-emerald-300'
+                    : 'bg-red-950/70 border-red-800 text-red-300 animate-pulse'
+                }`}
+              >
+                {isOnline ? <Wifi className="w-4 h-4" /> : <WifiOff className="w-4 h-4" />}
+                {isOnline ? 'Online' : 'Offline Mode'}
+              </button>
+
+              {pendingScans.length > 0 && (
+                <button
+                  onClick={onSyncPendingScans}
+                  disabled={!isOnline || isSyncing}
+                  className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg text-sm bg-amber-600 hover:bg-amber-500 text-white font-medium shadow-sm transition-all disabled:opacity-50"
+                >
+                  <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
+                  Sync ({pendingScans.length} pending)
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
-      </header>
-
-      {/* Mobile Bottom Tab Bar — replaces in-header nav below md breakpoint */}
-      <nav
-        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-stone-900 border-t border-stone-800 shadow-[0_-2px_8px_rgba(0,0,0,0.3)] pb-[env(safe-area-inset-bottom)]"
-        aria-label="Primary"
-      >
-        <div className="grid grid-cols-4">
-          {navItems.map((item) => {
-            const isActive = activeView === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => setActiveView(item.id)}
-                className={`flex flex-col items-center justify-center gap-0.5 py-2 min-h-[3.25rem] transition-colors ${
-                  isActive ? item.activeClasses : 'text-stone-500 hover:text-stone-300'
-                }`}
-                aria-current={isActive ? 'page' : undefined}
-              >
-                {item.icon}
-                <span className="text-[10px] font-medium leading-none">{item.shortLabel}</span>
-              </button>
-            );
-          })}
-        </div>
-      </nav>
     </>
   );
 };
