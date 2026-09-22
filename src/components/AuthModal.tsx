@@ -95,6 +95,41 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       .catch(() => setSupabaseLive(false));
   }, [isOpen]);
 
+  // Lock the background page while the modal is open so it can't be
+  // scrolled/revealed underneath on mobile (iOS Safari in particular
+  // still lets the body scroll behind a fixed overlay unless the body
+  // itself is pinned in place).
+  useEffect(() => {
+    if (!isOpen) return;
+    const scrollY = window.scrollY;
+    const { body } = document;
+    const prev = {
+      position: body.style.position,
+      top: body.style.top,
+      left: body.style.left,
+      right: body.style.right,
+      width: body.style.width,
+      overflow: body.style.overflow,
+    };
+
+    body.style.position = 'fixed';
+    body.style.top = `-${scrollY}px`;
+    body.style.left = '0';
+    body.style.right = '0';
+    body.style.width = '100%';
+    body.style.overflow = 'hidden';
+
+    return () => {
+      body.style.position = prev.position;
+      body.style.top = prev.top;
+      body.style.left = prev.left;
+      body.style.right = prev.right;
+      body.style.width = prev.width;
+      body.style.overflow = prev.overflow;
+      window.scrollTo(0, scrollY);
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   // 1. Supabase Cloud Sign In
@@ -245,7 +280,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-black/80 backdrop-blur-sm overflow-y-auto sm:p-4">
+    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-black/80 backdrop-blur-sm overflow-y-auto overscroll-contain sm:p-4">
       <div
         className="bg-stone-900 sm:border sm:border-stone-800 rounded-none sm:rounded-2xl w-full min-h-[100dvh] sm:min-h-0 sm:max-w-lg p-5 sm:p-6 shadow-2xl relative sm:my-8"
       >
